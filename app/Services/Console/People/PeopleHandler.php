@@ -52,14 +52,14 @@ class PeopleHandler
     public function replaceDates(string $separator): array
     {
         $people_files = $this->getFilesById($separator);
-        $regexp = '/(0[1-9]|[12][0-9]|3[01])[\/](0[1-9]|1[012])[\/]\d{2}/';
+        $pattern = '/(0[1-9]|[12][0-9]|3[01])[\/](0[1-9]|1[012])[\/]\d{2}/';
         $result = [];
         foreach ($people_files as $people_id => $people) {
             $replace_count = 0;
             if (!empty($people['files'])) {
                 foreach ($people['files'] as $file) {
                     $content = Storage::disk('temp')->get($file);
-                    if (preg_match_all($regexp, $content, $matches, PREG_SET_ORDER)) {
+                    if (preg_match_all($pattern, $content, $matches, PREG_SET_ORDER)) {
                         foreach ($matches as $found_date) {
                             $formatted_date = Carbon::parse($found_date[0])->format('d-m-Y');
                             $content = str_replace($found_date[0], $formatted_date, $content);
